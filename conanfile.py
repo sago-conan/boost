@@ -19,16 +19,23 @@ class BoostConan(ConanFile):
         if self.settings.os == "Windows":
             del self.options.fPIC
 
+    @property
+    def _boost_folder(self):
+        return "boost_{}".format(self.version.replace(".", "_"))
+
     def source(self):
-        url = "https://dl.bintray.com/boostorg/release/{}/source/boost_{}.zip".format(
-            self.version, self.version.replace(".", "_"))
+        url = "https://dl.bintray.com/boostorg/release/{}/source/{}.zip".format(
+            self.version, self._boost_folder)
         tools.get(url)
 
     def _bootstrap(self):
         if tools.os_info.is_windows:
-            cmd = os.path.join(self.source_folder, "bootstrap.bat")
+            cmd = os.path.join(self.source_folder, self._boost_folder,
+                               "bootstrap.bat")
         else:
-            cmd = "sh {}".format(os.path.join(self.source_folder, "bootstrap.sh"))
+            cmd = "sh {}".format(
+                os.path.join(self.source_folder, self._boost_folder,
+                             "bootstrap.sh"))
         self.output.info("Bootstrap: {}".format(cmd))
         try:
             self.run(cmd)
