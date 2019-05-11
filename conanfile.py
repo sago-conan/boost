@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
 import os
 from conans import ConanFile, tools
 
@@ -35,7 +38,7 @@ class BoostConan(ConanFile):
             cmd = "bootstrap.bat"
         else:
             cmd = "./bootstrap.sh"
-        with tools.chdir(folder): # bat中未切换目录，需要在对应目录执行
+        with tools.chdir(folder):  # bat中未切换目录，需要在对应目录执行
             try:
                 self.output.info("Bootstrap: {}".format(cmd))
                 self.run(cmd)
