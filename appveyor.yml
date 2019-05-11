@@ -22,8 +22,8 @@ environment:
 install:
   - git submodule update --init --recursive
   - set PATH=%PATH%;%PYTHON%/Scripts/
-  - pip.exe install conan conan-package-tools --upgrade
+  - "%PYTHON%\\python.exe -m pip install conan conan-package-tools --upgrade"
   - conan user # It creates the conan data directory
 
 test_script:
-  - python build.py
+  - "%PYTHON%\\python.exe build.py"
