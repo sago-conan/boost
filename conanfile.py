@@ -24,26 +24,26 @@ class BoostConan(ConanFile):
         return "boost_{}".format(self.version.replace(".", "_"))
 
     def source(self):
-        url = "https://dl.bintray.com/boostorg/release/{}/source/{}.zip".format(
+        # zip压缩包中的脚本无法携带执行权限
+        url = "https://dl.bintray.com/boostorg/release/{}/source/{}.tar.bz2".format(
             self.version, self._boost_folder)
         tools.get(url)
 
     def _bootstrap(self):
+        folder = os.path.join(self.source_folder, self._boost_folder)
         if tools.os_info.is_windows:
-            cmd = os.path.join(self.source_folder, self._boost_folder,
-                               "bootstrap.bat")
+            cmd = "bootstrap.bat"
         else:
-            cmd = "sh {}".format(
-                os.path.join(self.source_folder, self._boost_folder,
-                             "bootstrap.sh"))
-        self.output.info("Bootstrap: {}".format(cmd))
-        try:
-            self.run(cmd)
-        except Exception as exc:
-            self.output.warn(str(exc))
-            if os.path.exists("bootstrap.log"):
-                self.output.warn(tools.load("bootstrap.log"))
-            raise
+            cmd = "./bootstrap.sh"
+        with tools.chdir(folder): # bat中未切换目录，需要在对应目录执行
+            try:
+                self.output.info("Bootstrap: {}".format(cmd))
+                self.run(cmd)
+            except Exception as exc:
+                self.output.warn(str(exc))
+                if os.path.exists("bootstrap.log"):
+                    self.output.warn(tools.load("bootstrap.log"))
+                raise
 
     def build(self):
         # bootstrap
