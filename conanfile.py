@@ -98,9 +98,10 @@ class BoostConan(ConanFile):
                 raise
 
     # generate user-config.jam
-    def _user_config(self):
+    def _gen_user_config(self):
         pass
 
+    @property
     def _build_options(self):
         options = []
         options.append("--prefix={}".format(self.package_folder))
@@ -109,6 +110,7 @@ class BoostConan(ConanFile):
         options.append("-j{}".format(tools.cpu_count()))
         return options
 
+    @property
     def _build_properties(self):
         prop = []
         # prop.append("toolset={}".format(toolset))
@@ -122,7 +124,7 @@ class BoostConan(ConanFile):
         # bootstrap
         self._bootstrap()
         # config
-        self._user_config()
+        self._gen_user_config()
         # build
         cmd = "b2 {} {} install".format(" ".join(self._build_options),
                                         " ".join(self._build_properties))
