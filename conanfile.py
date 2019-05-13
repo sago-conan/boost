@@ -107,6 +107,7 @@ class BoostConan(ConanFile):
         options.append("--prefix={}".format(self.package_folder))
         options.append("--build-dir={}".format(self.build_folder))
         options.append("--build-type=complete")
+        options.append("--layout=versioned")
         options.append("-j{}".format(tools.cpu_count()))
         return options
 
