@@ -126,8 +126,9 @@ class BoostConan(ConanFile):
         # config
         self._gen_user_config()
         # build
-        cmd = "b2 {} {} install".format(" ".join(self._build_options),
-                                        " ".join(self._build_properties))
+        cmd = "{} {} {} install".format(
+            "b2.exe" if tools.os_info.is_windows else "./b2",
+            " ".join(self._build_options), " ".join(self._build_properties))
         with tools.chdir(self._boost_folder):
             self.output.info("Build: {}".format(cmd))
             self.run(cmd)
